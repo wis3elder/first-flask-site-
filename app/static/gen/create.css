@@ -1,0 +1,199 @@
+/* ========== ОСНОВНЫЕ СТИЛИ ФОРМЫ ========== */
+.create-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ========== ЗАГОЛОВОК ФОРМЫ ========== */
+.create-title {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.create-title i {
+    color: #28a745;
+    margin-right: 10px;
+}
+
+/* ========== ПОЛЯ ВВОДА ========== */
+.create-input {
+    background: rgba(30, 40, 50, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #e0e0e0 !important;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Стили для выпадающего списка (select) */
+select.create-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+select.create-input option {
+    background: #1a252f;
+    color: #e0e0e0;
+    padding: 10px;
+}
+
+select.create-input option:hover,
+select.create-input option:checked {
+    background: #28a745;
+    color: white;
+}
+
+.create-input:focus {
+    background: rgba(40, 55, 70, 0.98) !important;
+    border-color: #28a745 !important;
+    color: #ffffff !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.create-input::placeholder {
+    color: #a0a0a0 !important;
+}
+
+/* ========== КНОПКА СОЗДАНИЯ ========== */
+.btn-create {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    flex: 1;
+}
+
+.btn-create:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+/* ========== КНОПКА ОТМЕНЫ ========== */
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+    flex: 1;
+    line-height: normal;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+/* ========== ГРУППА КНОПОК ========== */
+.create-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* ========== АДАПТИВ ========== */
+@media (max-width: 768px) {
+    .create-form {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .create-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* ========== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ДЛЯ SELECT (на всякий случай) ========== */
+select.create-input,
+select.update-input,
+.create-form select,
+.update-form select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 16px;
+    cursor: pointer;
+    background-color: rgba(30, 40, 50, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #e0e0e0 !important;
+}
+
+select.create-input option,
+select.update-input option,
+.create-form select option,
+.update-form select option {
+    background: #1a252f;
+    color: #e0e0e0;
+    padding: 10px;
+}
+
+select.create-input option:checked,
+select.update-input option:checked {
+    background: #28a745;
+    color: white;
+}
+
+.update-form select option:checked {
+    background: #ffc107;
+    color: #1a1a2e;
+}
+
+select.create-input:focus,
+select.update-input:focus {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+    outline: none;
+}
+
+.update-form select:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}

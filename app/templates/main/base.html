@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Flask-Assets: основной CSS -->
+    {% assets "main_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+
+    {% block style %}{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='icon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icon/favicon-16x16.png') }}">
+
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <!-- остальное без изменений -->
+
+    <!-- Проверка: если не авторизован и не страница авторизации - редирект -->
+    {% if not current_user.is_authenticated and not hide_header %}
+        <script>
+            // Мгновенный редирект для неавторизованных
+            window.location.href = "{{ url_for('user.user_login') }}";
+        </script>
+    {% else %}
+        <div class="page">
+
+            <!-- Шапка сайта (скрывается если hide_header = True) -->
+            {% if not hide_header %}
+                <header class="header">
+                    {% if current_user.is_authenticated and current_user.status == 'teacher' %}
+                        {% include 'post/header.html' %}      <!-- Хедер учителя -->
+                    {% elif current_user.is_authenticated and current_user.status == 'user' %}
+                        {% include 'main/header.html' %}      <!-- Хедер студента -->
+                    {% else %}
+                        <script>window.location.href = "{{ url_for('user.user_login') }}";</script>
+                    {% endif %}
+                </header>
+            {% endif %}
+
+            <!-- Основной контент -->
+            <main class="content">
+                {% include 'main/_flash.html' %}               <!-- Flash сообщения -->
+                <h1>{{ self.title() }}</h1>                   <!-- Заголовок страницы -->
+                {% block content %}{% endblock %}              <!-- Основной блок контента -->
+            </main>
+
+            <!-- Подвал сайта -->
+            <footer class="py-3 my-4">
+                {% include 'main/footer.html' %}
+            </footer>
+
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Защита от кнопки "назад" -->
+        <script>
+            (function() {
+                // Проверяем, загружена ли страница из кэша (кнопка "назад")
+                const navEntry = performance.getEntriesByType("navigation")[0];
+                if (navEntry && (navEntry.type === "back_forward" || navEntry.type === "reload")) {
+                    {% if not current_user.is_authenticated %}
+                        window.location.href = "{{ url_for('user.user_login') }}";
+                    {% endif %}
+                }
+
+                // Дополнительная проверка при показе страницы
+                window.addEventListener('pageshow', function(event) {
+                    if (event.persisted) {
+                        // Страница загружена из бэк-кэша (кнопка "назад")
+                        {% if not current_user.is_authenticated %}
+                            window.location.href = "{{ url_for('user.user_login') }}";
+                        {% endif %}
+                    }
+                });
+
+                // Блокируем кнопку "назад" через pushState
+                history.pushState(null, null, location.href);
+                window.addEventListener('popstate', function() {
+                    {% if not current_user.is_authenticated %}
+                        window.location.href = "{{ url_for('user.user_login') }}";
+                    {% else %}
+                        history.pushState(null, null, location.href);
+                    {% endif %}
+                });
+            })();
+        </script>
+    {% endif %}
+
+</body>
+</html>

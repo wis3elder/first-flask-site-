@@ -1,0 +1,170 @@
+/*
+    ============================================
+    СТИЛИ ДЛЯ СТРАНИЦЫ РЕДАКТИРОВАНИЯ ТЕМЫ (upd.html)
+    Файл: static/css/update.css
+    Используется только на странице /post/<id>/update
+    ============================================
+*/
+
+/* ========== ОСНОВНЫЕ СТИЛИ ФОРМЫ ========== */
+.update-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ========== ЗАГОЛОВОК ФОРМЫ ========== */
+.update-title {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.update-title i {
+    color: #ffc107;  /* Желтый цвет иконки (символ редактирования) */
+    margin-right: 10px;
+}
+
+/* ========== ПОЛЯ ВВОДА ========== */
+.update-input {
+    background: rgba(30, 40, 50, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #e0e0e0 !important;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Readonly поле (учитель) - нельзя редактировать */
+.update-input[readonly] {
+    cursor: not-allowed;
+    opacity: 0.7;
+    background: rgba(20, 30, 40, 0.95) !important;
+}
+
+/* Фокус на поле ввода */
+.update-input:focus {
+    background: rgba(40, 55, 70, 0.98) !important;
+    border-color: #ffc107 !important;  /* Желтая рамка при фокусе */
+    color: #ffffff !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+/* Плейсхолдер (подсказка внутри поля) */
+.update-input::placeholder {
+    color: #a0a0a0 !important;
+}
+
+/* ========== ВЫПАДАЮЩИЙ СПИСОК (SELECT) ========== */
+select.update-input {
+    appearance: none;           /* Убираем стандартную стрелку */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Кастомная стрелка вниз */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+/* Стили для option внутри select */
+select.update-input option {
+    background: #1a252f;
+    color: #e0e0e0;
+    padding: 10px;
+}
+
+/* Выбранный option (желтый) */
+select.update-input option:checked {
+    background: #ffc107;
+    color: #1a1a2e;
+}
+
+/* Фокус на select */
+select.update-input:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+    outline: none;
+}
+
+/* ========== КНОПКА СОХРАНЕНИЯ (ЖЕЛТАЯ) ========== */
+.btn-save {
+    background: #ffc107;
+    color: #1a1a2e;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    flex: 1;
+}
+
+.btn-save:hover {
+    background: #ffb300;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+/* ========== КНОПКА ОТМЕНЫ (ПРОЗРАЧНАЯ) ========== */
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+    flex: 1;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+/* ========== ГРУППА КНОПОК ========== */
+.update-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* ========== АДАПТИВ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ========== */
+@media (max-width: 768px) {
+    .update-form {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .update-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

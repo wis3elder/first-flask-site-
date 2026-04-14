@@ -1,0 +1,86 @@
+<!--
+    ============================================
+    СТРАНИЦА СПИСКА ТЕМ ДЛЯ СТУДЕНТА
+    Роль: отображается только для авторизованных студентов (status = 'user')
+    Файл: templates/main/home_page.html
+    Маршрут: user.home_user (user_routes.py)
+    URL: /home/<login>
+    ============================================
+
+    ЧТО ДЕЛАЕТ ЭТА СТРАНИЦА:
+    - Показывает студенту все темы, которые были созданы ДЛЯ НЕГО
+    - Фильтрация происходит на уровне маршрута (filter_by(student=current_user.id))
+    - Студент может только ПРОСМАТРИВАТЬ темы (нет кнопок редактирования/удаления)
+    - Это безопасно, так как студент не может изменять или удалять темы
+-->
+
+{% extends "main/base.html" %}
+
+{% block title %}Topics{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <!--
+                    ЗАГОЛОВКИ КОЛОНОК ТАБЛИЦЫ
+                    У студента ТРИ колонки (нет колонки Action с кнопками)
+                -->
+                <th>👨‍🏫 Teacher</th>      <!-- Учитель, который создал тему -->
+                <th>📖 Topic</th>         <!-- Название темы -->
+                <th>👨‍🎓 Student</th>     <!-- Студент, для которого создана тема -->
+            </tr>
+        </thead>
+        <tbody>
+        <!--
+            ЦИКЛ ПО ВСЕМ ТЕМАМ (posts)
+            posts приходит из маршрута user.home_user
+            Каждая тема (post) содержит:
+            - author - учитель (связь через ForeignKey)
+            - student_user - студент (связь через ForeignKey)
+            - subject - название темы
+        -->
+        {% for post in posts %}
+            <tr>
+                <!-- КОЛОНКА: УЧИТЕЛЬ -->
+                <td>
+                    <div class="teacher-cell">
+                        <!-- Аватар учителя (из папки static/upload/) -->
+                        <img class="teacher-avatar"
+                             src="{{ url_for('static', filename='upload/' + post.author.avatar) }}"
+                             alt="avatar">
+                        <!-- Имя учителя -->
+                        <span>{{ post.author.name }}</span>
+                    </div>
+                </td>
+
+                <!-- КОЛОНКА: ТЕМА -->
+                <td>{{ post.subject }}</td>
+
+                <!-- КОЛОНКА: СТУДЕНТ -->
+                <td>
+                    <div class="teacher-cell">
+                        <!-- Аватар студента -->
+                        <img class="teacher-avatar"
+                             src="{{ url_for('static', filename='upload/' + post.student_user.avatar) }}"
+                             alt="avatar">
+                        <!-- Имя студента -->
+                        <span>{{ post.student_user.name }}</span>
+                    </div>
+                </td>
+
+                <!--
+                    У СТУДЕНТА НЕТ КОЛОНКИ ACTION
+                    Студент не может редактировать или удалять темы
+                    Это намеренное разделение функционала
+                -->
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

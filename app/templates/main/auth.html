@@ -1,0 +1,178 @@
+{% extends 'main/base.html' %}
+
+{% set hide_header = True %}
+
+{% block title %}
+    {% if active_tab == 'user' and active_mode == 'login' %}
+        Student Login
+    {% elif active_tab == 'user' and active_mode == 'register' %}
+        Student Registration
+    {% elif active_tab == 'teacher' %}
+        Teacher Login
+    {% else %}
+        Authorization
+    {% endif %}
+{% endblock %}
+
+{% block style %}
+    {% assets "auth_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+{% endblock %}
+
+{% block content %}
+<div class="login-form">
+    <div class="login-title">
+        <i class="fas fa-lock"></i>
+        {% if active_tab == 'user' and active_mode == 'login' %}
+            Student Login
+        {% elif active_tab == 'user' and active_mode == 'register' %}
+            Student Registration
+        {% elif active_tab == 'teacher' %}
+            Teacher Login
+        {% else %}
+            Authorization
+        {% endif %}
+    </div>
+
+    <!-- Вкладки: Студент / Учитель -->
+    <div class="auth-tabs">
+        <a href="{{ url_for('user.user_login') }}" class="tab-btn {% if active_tab == 'user' %}active{% endif %}">
+            <i class="fas fa-user"></i> Student
+        </a>
+        <a href="{{ url_for('user.teacher_login') }}" class="tab-btn {% if active_tab == 'teacher' %}active{% endif %}">
+            <i class="fas fa-chalkboard-user"></i> Teacher
+        </a>
+    </div>
+
+    <!-- РЕЖИМ: СТУДЕНТ -->
+    {% if active_tab == 'user' %}
+
+        <!-- Переключатель: Логин / Регистрация -->
+        <div class="mode-switch">
+            <a href="{{ url_for('user.user_login') }}" class="mode-btn {% if active_mode == 'login' %}active{% endif %}">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{{ url_for('user.user_register') }}" class="mode-btn {% if active_mode == 'register' %}active{% endif %}">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+
+        <!-- РЕЖИМ: ЛОГИН СТУДЕНТА -->
+        {% if active_mode == 'login' %}
+            <form method="POST" autocomplete="off">
+                {{ form.hidden_tag() }}
+
+                <div class="input-wrapper">
+                    {{ form.login(class="login-input", placeholder="🔑 Login", id="login") }}
+                </div>
+
+                <div class="password-wrapper">
+                    {{ form.password(class="login-input", placeholder="🔒 Password", type="password", id="password") }}
+                    <button type="button" class="toggle-password" data-target="password">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+
+                <div class="remember-me">
+                    {{ form.remember(class="remember-checkbox") }}
+                    {{ form.remember.label(class="remember-label") }}
+                </div>
+
+                <div class="login-buttons">
+                    {{ form.submit(class="btn-login") }}
+                </div>
+            </form>
+
+        <!-- РЕЖИМ: РЕГИСТРАЦИЯ СТУДЕНТА -->
+        {% elif active_mode == 'register' %}
+            <form method="POST" enctype="multipart/form-data" autocomplete="off">
+                {{ form.hidden_tag() }}
+
+                {{ form.name(class="login-input", placeholder="👤 Full Name") }}
+                {{ form.login(class="login-input", placeholder="🔑 Login") }}
+
+                {% if form.login.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.login.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="password-wrapper">
+                    {{ form.password(class="login-input", placeholder="🔒 Password", type="password", id="reg_password") }}
+                    <button type="button" class="toggle-password" data-target="reg_password">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+
+                <div class="password-wrapper">
+                    {{ form.confirm_password(class="login-input", placeholder="✅ Confirm Password", type="password", id="reg_confirm") }}
+                    <button type="button" class="toggle-password" data-target="reg_confirm">
+                        <i class="fas fa-eye-slash"></i>
+                    </button>
+                </div>
+
+                <div class="login-buttons">
+                    {{ form.submit(class="btn-login") }}
+                </div>
+            </form>
+        {% endif %}
+
+    <!-- РЕЖИМ: УЧИТЕЛЬ -->
+    {% elif active_tab == 'teacher' %}
+        <div class="teacher-info">
+            <i class="fas fa-chalkboard-user"></i>
+            <p>Teacher Access Only</p>
+        </div>
+
+        <form method="POST" autocomplete="off">
+            {{ form.hidden_tag() }}
+            {{ form.login(class="login-input", placeholder="🔑 Login") }}
+
+            <div class="password-wrapper">
+                {{ form.password(class="login-input", placeholder="🔒 Password", type="password", id="teacher_password") }}
+                <button type="button" class="toggle-password" data-target="teacher_password">
+                    <i class="fas fa-eye-slash"></i>
+                </button>
+            </div>
+
+            <div class="remember-me">
+                {{ form.remember(class="remember-checkbox") }}
+                {{ form.remember.label(class="remember-label") }}
+            </div>
+
+            <div class="login-buttons">
+                {{ form.submit(class="btn-login") }}
+            </div>
+        </form>
+    {% endif %}
+</div>
+
+<script>
+    // Предотвращение повторной отправки формы при обновлении
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    // Переключение видимости пароля (глаз)
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.dataset.target;
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+
+            if (passwordInput && passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else if (passwordInput) {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+    });
+</script>
+{% endblock %}

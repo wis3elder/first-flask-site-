@@ -1,0 +1,83 @@
+<!--
+    ============================================
+    СТРАНИЦА СОЗДАНИЯ НОВОЙ ТЕМЫ (ДЛЯ УЧИТЕЛЯ)
+    Роль: доступно только для авторизованных учителей (status = 'teacher')
+    Файл: templates/post/create.html
+    Маршрут: post.create (post_routes.py)
+    URL: /post/create
+    ============================================
+
+    ЧТО ДЕЛАЕТ ЭТА СТРАНИЦА:
+    - Позволяет учителю создать новую тему
+    - Выбирает студента из выпадающего списка (логины студентов)
+    - Вводит название темы
+    - После создания перенаправляет на домашнюю страницу учителя
+
+    ЗАЩИТА:
+    - Только учителя имеют доступ (проверка в post_routes.py)
+    - CSRF защита через form.csrf_token
+    - Автоматическая привязка темы к текущему учителю
+-->
+
+{% extends 'main/base.html' %}
+
+{% block title %}Add a topic{% endblock %}
+
+{% block style %}
+    {% assets "create_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+{% endblock %}
+
+{% block content %}
+<div class="create-form">
+    <!-- ЗАГОЛОВОК ФОРМЫ -->
+    <div class="create-title">
+        <i class="fas fa-plus-circle"></i> Add New Topic
+    </div>
+
+    <!--
+        ФОРМА СОЗДАНИЯ ТЕМЫ
+        method="post" - отправка данных на сервер
+    -->
+    <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
+
+        <!-- CSRF ЗАЩИТА (обязательно для Flask-WTF форм) -->
+        {{ form.csrf_token }}
+
+        <!--
+            ПОЛЕ: НАЗВАНИЕ ТЕМЫ
+            type="text" - текстовое поле
+            name="subject" - имя поля для отправки на сервер
+            placeholder - подсказка внутри поля
+        -->
+        <input name="subject" type="text" placeholder="📖 Topic" class="create-input">
+
+        <!--
+            ПОЛЕ: ВЫБОР СТУДЕНТА
+            form.student - выпадающий список (SelectField из Flask-WTF)
+            choices заполняются в post_routes.py: [(s.id, s.login) for s in ...]
+            Значение: id студента, Отображение: логин студента
+        -->
+        {{ form.student(class="create-input", placeholder="👨‍🎓 Student") }}
+
+        <!-- ГРУППА КНОПОК -->
+        <div class="create-buttons">
+
+            <!-- КНОПКА СОХРАНЕНИЯ (ОТПРАВКИ ФОРМЫ) -->
+            <button type="submit" class="btn-create">
+                <i class="fas fa-save"></i> Add
+            </button>
+
+            <!--
+                КНОПКА ОТМЕНЫ
+                При нажатии возвращает на домашнюю страницу учителя
+                Передается параметр login=current_user.login для формирования URL
+            -->
+            <a href="{{ url_for('post.home_teacher', login=current_user.login) }}" class="btn-cancel">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

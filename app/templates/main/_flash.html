@@ -1,0 +1,45 @@
+<!--
+    ============================================
+    FLASH-СООБЩЕНИЯ (УВЕДОМЛЕНИЯ)
+    Файл: templates/main/_flash.html
+    Подключается в: main/base.html
+    Используется для: отображения временных уведомлений
+    ============================================
+
+    ЧТО ДЕЛАЕТ ЭТОТ ФАЙЛ:
+    - Получает все flash-сообщения из сессии
+    - Отображает их в виде цветных уведомлений
+    - Сообщения автоматически исчезают после просмотра
+
+    ОТКУДА БЕРУТСЯ СООБЩЕНИЯ:
+    - Из маршрутов (routes), где вызывается flash()
+    - Например: flash("Тема успешно создана!", "success")
+
+    КАТЕГОРИИ СООБЩЕНИЙ:
+    - success (зеленое) - успешное действие
+    - danger (красное) - ошибка
+    - warning (желтое) - предупреждение
+    - info (синее) - информация
+-->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!--
+        get_flashed_messages(with_categories=true) - возвращает список кортежей
+        Каждый кортеж: (категория, сообщение)
+        Например: [('success', 'Тема успешно создана!'), ('danger', 'Ошибка!')]
+    -->
+
+    {% if messages %}
+        <!-- Если есть сообщения - перебираем их -->
+        {% for category, message in messages %}
+            <!--
+                alert alert-{{ category }} - классы Bootstrap
+                success -> alert-success (зеленый)
+                danger -> alert-danger (красный)
+                warning -> alert-warning (желтый)
+                info -> alert-info (синий)
+            -->
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}

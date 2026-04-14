@@ -1,0 +1,51 @@
+<!--
+    ============================================
+    HEADER ДЛЯ СТУДЕНТА
+    Роль: отображается только для авторизованных пользователей со статусом 'user'
+    Файл: templates/main/header.html
+    Подключается в: main/base.html (когда current_user.status == 'user')
+    ============================================
+-->
+
+<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+    <!--
+        ЛОГОТИП С ССЫЛКОЙ НА ГЛАВНУЮ
+        При нажатии на логотип - переход на домашнюю страницу студента
+        Передается параметр login=current_user.login для формирования URL вида /home/имя_логина
+    -->
+    <a href="{{ url_for('user.home_user', login=current_user.login) }}"
+       class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <img class="header__img" src="{{ url_for('static', filename='img/WS.png') }}" alt="logo">
+    </a>
+
+    <!--
+        НАВИГАЦИОННОЕ МЕНЮ
+        У студента меньше пунктов, чем у учителя (нет кнопки "Add topic")
+    -->
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+        <!-- Пункт "Home" - возвращает на главную страницу студента -->
+        <li>
+            <a href="{{ url_for('user.home_user', login=current_user.login) }}"
+               class="nav-link px-2 text-secondary">Home</a>
+        </li>
+
+        <!-- У студента НЕТ кнопки "Add topic" - это намеренное разделение функционала -->
+    </ul>
+
+    <!--
+        БЛОК АВТОРИЗАЦИИ
+        Отображает приветствие, роль и кнопку выхода
+    -->
+    <div class="auth-buttons">
+        <!-- Приветствие с именем пользователя (из БД) -->
+        <span class="user-name">Welcome, {{ current_user.name }}!</span>
+
+        <!-- Отображение роли (Student) -->
+        <span class="user-role">(Student)</span>
+
+        <!-- Кнопка выхода - завершает сессию и перенаправляет на страницу логина -->
+        <a href="{{ url_for('user.logout') }}" class="btn-logout">Log out</a>
+    </div>
+</div>

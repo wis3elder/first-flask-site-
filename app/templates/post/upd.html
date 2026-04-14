@@ -1,0 +1,112 @@
+<!--
+    ============================================
+    СТРАНИЦА РЕДАКТИРОВАНИЯ ТЕМЫ (ДЛЯ УЧИТЕЛЯ)
+    Роль: доступно только для авторизованных учителей (status = 'teacher')
+    Файл: templates/post/upd.html
+    Маршрут: post.update (post_routes.py)
+    URL: /post/<id>/update
+    ============================================
+
+    ЧТО ДЕЛАЕТ ЭТА СТРАНИЦА:
+    - Позволяет учителю редактировать существующую тему
+    - Поле "Teacher" - только для чтения (readonly)
+    - Поле "Topic" - можно редактировать
+    - Поле "Student" - выпадающий список со всеми студентами
+    - После сохранения перенаправляет на домашнюю страницу учителя
+
+    ЗАЩИТА:
+    - Только учителя имеют доступ (проверка в post_routes.py)
+    - Только автор темы может редактировать (проверка post.teacher != current_user.id)
+    - CSRF защита через form.csrf_token (если используется форма Flask-WTF)
+-->
+
+{% extends 'main/base.html' %}
+
+{% block title %}Edit topic {{ post.id }}{% endblock %}
+
+{% block style %}
+    {% assets "update_css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+{% endblock %}
+
+{% block content %}
+<div class="update-form">
+
+    <!-- ЗАГОЛОВОК ФОРМЫ -->
+    <div class="update-title">
+        <i class="fas fa-pencil-alt"></i> Редактирование записи
+    </div>
+
+    <!--
+        ФОРМА РЕДАКТИРОВАНИЯ ТЕМЫ
+        method="post" - отправка данных на сервер
+    -->
+    <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
+
+        <!--
+            ПОЛЕ: УЧИТЕЛЬ (ТОЛЬКО ДЛЯ ЧТЕНИЯ)
+            value="{{ post.author.name }}" - подставляется имя учителя из БД
+            readonly - поле нельзя редактировать
+            Это поле отображает автора темы (нельзя изменить)
+        -->
+        <input value="{{ post.author.name }}"
+               name="teacher"
+               type="text"
+               placeholder="👨‍🏫 Преподаватель"
+               class="update-input"
+               readonly>
+
+        <!--
+            ПОЛЕ: НАЗВАНИЕ ТЕМЫ (РЕДАКТИРУЕМОЕ)
+            value="{{ post.subject }}" - подставляется текущее название темы
+            name="subject" - имя поля для отправки на сервер
+        -->
+        <input value="{{ post.subject }}"
+               name="subject"
+               type="text"
+               placeholder="📖 Тема"
+               class="update-input">
+
+        <!--
+            ПОЛЕ: ВЫБОР СТУДЕНТА (ВЫПАДАЮЩИЙ СПИСОК)
+            name="student" - имя поля для отправки на сервер
+            class="update-input" - стилизация
+        -->
+        <select name="student" class="update-input">
+            <!--
+                ЦИКЛ ПО ВСЕМ СТУДЕНТАМ (users)
+                users приходит из маршрута post.update
+                Каждый студент представлен как user с полями id и login
+            -->
+            {% for user in users %}
+                <!--
+                    option value="{{ user.id }}" - значение для отправки на сервер (id студента)
+                    {% if user.id == post.student %}selected{% endif %} - если это текущий студент темы - делаем выбранным
+                -->
+                <option value="{{ user.id }}" {% if user.id == post.student %}selected{% endif %}>
+                    {{ user.login }}  <!-- Отображаем логин студента (не имя) -->
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- ГРУППА КНОПОК -->
+        <div class="update-buttons">
+
+            <!-- КНОПКА СОХРАНЕНИЯ (ОТПРАВКИ ФОРМЫ) -->
+            <button type="submit" class="btn-save">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+
+            <!--
+                КНОПКА ОТМЕНЫ
+                При нажатии возвращает на домашнюю страницу учителя
+                Передается параметр login=current_user.login для формирования URL
+            -->
+            <a href="{{ url_for('post.home_teacher', login=current_user.login) }}" class="btn-cancel">
+                <i class="fas fa-times"></i> Отмена
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

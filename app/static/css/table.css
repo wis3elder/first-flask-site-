@@ -1,0 +1,146 @@
+/* ========== ОСНОВНЫЕ СТИЛИ ТАБЛИЦЫ ========== */
+.custom-table {
+    width: 100%;
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-responsive {
+    overflow-x: visible;
+    background: transparent;
+}
+
+/* ========== ЗАГОЛОВКИ ========== */
+.custom-table thead tr,
+.custom-table thead th {
+    border-top: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #0f1720 0%, #1a252f 100%) !important;
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-table thead th:first-child {
+    border-top-left-radius: 16px;
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 16px;
+}
+
+/* ========== ЯЧЕЙКИ ТАБЛИЦЫ ========== */
+.custom-table tbody th,
+.custom-table tbody td {
+    color: #e0e0e0 !important;
+    font-weight: 400;
+    padding: 18px 20px;
+    font-size: 14px;
+}
+
+.custom-table tbody th small,
+.custom-table tbody td small {
+    color: #a0a0a0 !important;
+    font-weight: 300;
+}
+
+.custom-table tbody tr th,
+.custom-table tbody tr td {
+    background: rgba(30, 40, 50, 0.95) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Чередование строк (зебра) */
+.custom-table tbody tr:nth-child(even) th,
+.custom-table tbody tr:nth-child(even) td {
+    background: rgba(25, 35, 45, 0.95) !important;
+}
+
+/* Скругление углов таблицы */
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 16px;
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 16px;
+}
+
+/* Убираем последнюю нижнюю границу */
+.custom-table tbody tr:last-child td,
+.custom-table tbody tr:last-child th {
+    border-bottom: none !important;
+}
+
+/* ========== КНОПКИ ДЕЙСТВИЙ ========== */
+.action-icons {
+    white-space: nowrap;
+}
+
+.action-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin: 0 5px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* Жёлтый карандаш */
+.edit-icon {
+    background: #ffc107;
+    color: #1a1a2e;
+}
+
+/* Красная мусорка */
+.delete-icon {
+    background: #dc3545;
+    color: white;
+}
+
+/* ========== ВЕРТИКАЛЬНЫЕ РАЗДЕЛИТЕЛИ ========== */
+.custom-table td,
+.custom-table th {
+    position: relative;
+}
+
+/* Разделители между всеми колонками, кроме последней */
+.custom-table td:not(:last-child)::after,
+.custom-table th:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255, 255, 255, 0.25),
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0.25),
+        transparent
+    );
+}
+
+/* Горизонтальные разделители */
+.custom-table tbody tr td,
+.custom-table tbody tr th {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.custom-table tbody tr:last-child td,
+.custom-table tbody tr:last-child th {
+    border-bottom: none !important;
+}

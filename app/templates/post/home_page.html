@@ -1,0 +1,110 @@
+<!--
+    ============================================
+    СТРАНИЦА СПИСКА ТЕМ ДЛЯ УЧИТЕЛЯ
+    Роль: отображается только для авторизованных учителей (status = 'teacher')
+    Файл: templates/post/home_page.html
+    Маршрут: post.home_teacher (post_routes.py)
+    URL: /teacher/home/<login>
+    ============================================
+
+    ЧТО ДЕЛАЕТ ЭТА СТРАНИЦА:
+    - Показывает учителю все темы, которые он СОЗДАЛ
+    - Фильтрация происходит на уровне маршрута (filter_by(teacher=current_user.id))
+    - Учитель может РЕДАКТИРОВАТЬ и УДАЛЯТЬ свои темы
+    - Есть защита от удаления чужих тем (проверка в post_routes.py)
+    - Это безопасно, так как учитель видит и изменяет только свои темы
+-->
+
+{% extends "main/base.html" %}
+
+{% block title %}Topics{% endblock %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <!--
+                    ЗАГОЛОВКИ КОЛОНОК ТАБЛИЦЫ
+                    У учителя ЧЕТЫРЕ колонки (есть колонка Action с кнопками)
+                -->
+                <th>👨‍🏫 Teacher</th>      <!-- Учитель, который создал тему -->
+                <th>📖 Topic</th>         <!-- Название темы -->
+                <th>👨‍🎓 Student</th>     <!-- Студент, для которого создана тема -->
+                <th>⚡ Action</th>        <!-- Кнопки действий: редактировать, удалить -->
+            </tr>
+        </thead>
+        <tbody>
+        <!--
+            ЦИКЛ ПО ВСЕМ ТЕМАМ (posts)
+            posts приходит из маршрута post.home_teacher
+            Фильтрация: только темы, где teacher = current_user.id
+        -->
+        {% for post in posts %}
+            <tr>
+                <!-- КОЛОНКА: УЧИТЕЛЬ -->
+                <td>
+                    <div class="teacher-cell">
+                        <!-- Аватар учителя (автора темы) -->
+                        <img class="teacher-avatar"
+                             src="{{ url_for('static', filename='upload/' + post.author.avatar) }}"
+                             alt="avatar">
+                        <!-- Имя учителя -->
+                        <span>{{ post.author.name }}</span>
+                    </div>
+                </td>
+
+                <!-- КОЛОНКА: ТЕМА -->
+                <td>{{ post.subject }}</td>
+
+                <!-- КОЛОНКА: СТУДЕНТ -->
+                <td>
+                    <div class="teacher-cell">
+                        <!-- Аватар студента -->
+                        <img class="teacher-avatar"
+                             src="{{ url_for('static', filename='upload/' + post.student_user.avatar) }}"
+                             alt="avatar">
+                        <!-- Имя студента -->
+                        <span>{{ post.student_user.name }}</span>
+                    </div>
+                </td>
+
+                <!--
+                    КОЛОНКА: ДЕЙСТВИЯ (ACTION)
+                    Содержит кнопки для редактирования и удаления темы
+                    Видна только учителям
+                -->
+                <td class="action-icons">
+                    <!--
+                        КНОПКА РЕДАКТИРОВАНИЯ (карандаш)
+                        При нажатии переходит на страницу редактирования темы
+                        URL: /post/<id>/update
+                    -->
+                    <a href="{{ url_for('post.update', id=post.id) }}"
+                       class="edit-icon"
+                       title="Edit">
+                        <i class="fas fa-pen"></i>  <!-- Иконка карандаша -->
+                    </a>
+
+                    <!--
+                        КНОПКА УДАЛЕНИЯ (корзина)
+                        При нажатии показывает подтверждение (confirm)
+                        После подтверждения переходит на страницу удаления
+                        URL: /post/<id>/delete
+                    -->
+                    <a href="{{ url_for('post.delete', id=post.id) }}"
+                       class="delete-icon"
+                       title="Delete"
+                       onclick="return confirm('Точно удалить?')">
+                        <i class="fas fa-trash"></i>  <!-- Иконка корзины -->
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
